@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Create Account</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; display:flex; min-height:100vh; margin:0; }
+    .wrap { margin:auto; width: 360px; padding:24px; border:1px solid #dddddd00; border-radius:14px; }
+    h1 { font-size:1.25rem; margin:0 0 16px; }
+    label { display:block; margin:12px 0 6px; }
+    input { width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; }
+    button, a.button { margin-top:16px; padding:12px 16px; border-radius:10px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; text-decoration:none; display:inline-block; }
+    body {background-image: url(https://mcdn.wallpapersafari.com/medium/54/85/1EUg2L.jpg);}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Create your account</h1>
+
+    <!-- Example form (no backend) -->
+    <form action="#" method="post">
+      <label for="name">Full name</label>
+      <input id="name" name="name" type="text" required />
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required />
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required />
+
+      <button type="submit">Sign up</button>
+      <a class="button link" href="index.html">Back</a>
+    </form>
+  </main>
+</body>
+</html>

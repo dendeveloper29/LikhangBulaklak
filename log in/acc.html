@@ -1,0 +1,108 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6f9;
+    }
+
+    header {
+      background: #dc6ce2;
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between; /* ✅ pushes items left & right */
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 24px;
+    }
+
+    .logout-btn {
+      background: #e74c3c;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+
+    .cards {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 20px;
+    }
+
+    .card {
+      flex: 1;
+      min-width: 200px;
+      background: #f1eff1;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      font-size: 20px;
+      color: #060606;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 22px;
+      font-weight: bold;
+      color: #050606;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>DASHBOARD</h1>
+    <button class="logout-btn" onclick="logout()">⏻</button>
+  </header>
+
+  <div class="cards">
+    </div>
+    <div class="card">
+      <h3>Orders</h3>
+      <p>85</p>
+    </div>
+    <div class="card">
+      <h3>Revenue</h3>
+      <p>$5,230</p>
+    </div>
+  </div>
+
+  <script>
+    function logout() {
+      window.location.href = "adminlogin.html";
+    }
+  </script>
+
+</body>
+</html>

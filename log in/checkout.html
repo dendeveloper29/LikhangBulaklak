@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; display:flex; min-height:100vh; margin:0; background:#f9f9f9; }
+    .wrap { margin:auto; width: 420px; padding:24px; border:1px solid #ddd; border-radius:14px; background:#fff; }
+    h1 { font-size:1.3rem; margin:0 0 20px; text-align:center; }
+    label { display:block; margin:12px 0 6px; }
+    input, select { width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; }
+    .summary { background:#f1f1f1; padding:12px; border-radius:8px; margin:16px 0; }
+    button { width:100%; margin-top:16px; padding:12px; border-radius:10px; border:none; background:#222; color:#fff; cursor:pointer; font-size:1rem; }
+    .success { text-align:center; margin-top:20px; color:green; font-weight:bold; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Checkout</h1>
+
+    <!-- Order Summary -->
+    <div class="summary">
+      <p><strong>Item:</strong> Flower Bouquet</p>
+      <p><strong>Price:</strong> ₱500</p>
+      <p><strong>Delivery Fee:</strong> ₱50</p>
+      <hr>
+      <p><strong>Total:</strong> ₱550</p>
+    </div>
+
+    <!-- Delivery Info -->
+    <form id="checkoutForm">
+      <label for="name">Full Name</label>
+      <input id="name" name="name" type="text" required>
+
+      <label for="address">Delivery Address</label>
+      <input id="address" name="address" type="text" required>
+
+      <label for="phone">Phone Number</label>
+      <input id="phone" name="phone" type="tel" required>
+
+      <label for="payment">Payment Method</label>
+      <select id="payment" name="payment" required>
+        <option value="">-- Select Payment Method --</option>
+        <option value="cod">Cash on Delivery (COD)</option>
+      </select>
+
+      <button type="submit">Place Order</button>
+    </form>
+
+    <div id="message" class="success" style="display:none;">
+      ✅ Your order has been placed! Pay upon delivery.
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById("checkoutForm");
+    const msg = document.getElementById("message");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault(); // prevent page refresh
+      msg.style.display = "block"; // show success message
+      form.style.display = "none"; // hide form
+    });
+  </script>
+</body>
+</html>

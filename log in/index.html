@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LikhangBUlaklak - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+   
+    <header>
+        <h2>Likhang Bulaklak</h2> 
+        <a href="adminlogin.html" class="admin-btn">💻</a> 
+    </header>
+
+    
+    <div class="overlay"></div>
+
+   
+    <div class="main-wrapper">
+        <div class="login-box">
+            <h1>Welcome</h1>
+            <form onsubmit="return index (event)">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Log In</button>
+            </form>
+            <div class="links">
+                <a class="button link" href="createacc.html">Create an Account</a>
+                <a class="button link" href="forgot.html">Forgot password?</a>
+            
+
+            </div>
+        </div>
+    </div>
+    <script>
+          function index(event) {
+        event.preventDefault();
+        let user = document.getElementById("username").value;
+        let pass = document.getElementById("password").value;
+
+        // Hardcoded admin credentials
+        if (user === "dennis11"&& pass === "dennis12") {
+            alert("Welcome to Homepage");
+            window.location.href= "home.html";
+        } else {
+            alert("Invalid Admin Credentials!");
+        }
+    }
+    </script>
+</body>
+</html>

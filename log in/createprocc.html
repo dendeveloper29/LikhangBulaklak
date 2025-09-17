@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Create Account</title>
+  <style>
+    :root {
+      --bg: #0f172a;        /* slate-900 */
+      --card: #111827;      /* gray-900 */
+      --muted: #94a3b8;     /* slate-400 */
+      --text: #e5e7eb;      /* gray-200 */
+      --accent: #22c55e;    /* green-500 */
+      --danger: #ef4444;    /* red-500 */
+      --ring: #3b82f6;      /* blue-500 */
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 80% -10%, #1f2937 0, transparent 60%),
+                  radial-gradient(1200px 600px at -10% 120%, #1e293b 0, transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh; display: grid; place-items: center; padding: 24px;
+    }
+    .card {
+      width: 100%; max-width: 520px; background: linear-gradient(180deg, #111827 0%, #0b1220 100%);
+      border: 1px solid rgba(148,163,184,.2); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      overflow: hidden;
+    }
+    .header { padding: 28px 28px 14px; }
+    .title { margin: 0; font-size: 26px; letter-spacing: .2px; }
+    .subtitle { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+    form { padding: 20px 28px 28px; display: grid; gap: 14px; }
+    label { font-size: 13px; color: #cbd5e1; display: block; margin: 6px 0 6px; }
+    .row { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+    input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(148,163,184,.2);
+      background: #0b1220; color: var(--text); outline: none; transition: border-color .15s, box-shadow .15s;
+    }
+    input:focus { border-color: var(--ring); box-shadow: 0 0 0 3px rgba(59,130,246,.25); }
+    .hint { font-size: 12px; color: var(--muted); }
+    .error { font-size: 12px; color: var(--danger); margin-top: 6px; }
+    .pw-wrap { position: relative; }
+    .toggle {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px;
+    }
+    .meter {
+      height: 8px; background: #1f2937; border-radius: 999px; overflow: hidden; border: 1px solid rgba(148,163,184,.25);
+    }
+    .meter > div { height: 100%; width: 0%; background: var(--danger); transition: width .25s ease, background .25s ease; }
+    .terms { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: #cbd5e1; }
+    .btn {
+      display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+      padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(148,163,184,.25);
+      background: linear-gradient(180deg, #16a34a, #15803d); color: white; font-weight: 600; cursor: pointer;
+    }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+    .muted-link { color: #93c5fd; text-decoration: none; }
+    .footer { padding: 0 28px 24px; color: var(--muted); font-size: 13px; }
+    .toast { display:none; margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: #052e16; color:#bbf7d0; border:1px solid #14532d; font-size: 13px; }
+    .sep { height:1px; background: rgba(148,163,184,.2); margin: 8px 28px 16px; }
+    .flex { display:flex; justify-content: space-between; align-items:center; }
+    .small { font-size: 12px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="card" role="region" aria-labelledby="title">
+    <div class="header">
+      <h1 id="title" class="title">Create your account</h1>
+      <p class="subtitle">Sign up to continue. This demo stores data in your browser (localStorage).</p>
+    </div>
+
+    <form id="signupForm" novalidate>
+      <div class="row">
+        <div>
+          <label for="firstName">First name</label>
+          <input id="firstName" name="firstName" type="text" placeholder="Juan" autocomplete="given-name" required />
+        </div>
+        <div>
+          <label for="lastName">Last name</label>
+          <input id="lastName" name="lastName" type="text" placeholder="Dela Cruz" autocomplete="family-name" required />
+        </div>
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+        <p class="hint">We'll never share your email.</p>
+      </div>
+
+      <div>
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" minlength="3" maxlength="20" pattern="^[a-zA-Z0-9_\.\-]+$" placeholder="yourname" autocomplete="username" required />
+        <p class="hint">3–20 characters; letters, numbers, dot, hyphen, underscore.</p>
+      </div>
+
+      <div class="pw-wrap">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" minlength="8" placeholder="••••••••" autocomplete="new-password" required />
+        <button type="button" class="toggle" aria-label="Show password" id="togglePw">Show</button>
+      </div>
+
+      <div>
+        <div class="flex"><label>Password strength</label><span id="strengthLabel" class="small">Too short</span></div>
+        <div class="meter" aria-hidden="true"><div id="meterFill"></div></div>
+        <p class="hint">Use 8+ chars with upper/lowercase, number, and symbol.</p>
+      </div>
+
+      <div class="pw-wrap">
+        <label for="confirm">Confirm password</label>
+        <input id="confirm" name="confirm" type="password" placeholder="Repeat password" autocomplete="new-password" required />
+      </div>
+
+      <label class="terms">
+        <input id="terms" type="checkbox" required />
+        <span>I agree to the <a class="muted-link" href="#" onclick="alert('Add your Terms URL')">Terms</a> and <a class="muted-link" href="#" onclick="alert('Add your Privacy URL')">Privacy Policy</a>.</span>
+      </label>
+
+      <button class="btn" type="submit" id="submitBtn">Create account</button>
+      <div id="toast" class="toast" role="status" aria-live="polite">Account created! (Saved to localStorage for demo)</div>
+      <div id="errors" class="error" aria-live="assertive"></div>
+    </form>
+
+    <div class="sep"></div>
+    <div class="footer">
+      Already have an account? <a class="muted-link" href="login.html" onclick="alert('Wire this to your login page')">Log in</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('signupForm');
+    const errorsEl = document.getElementById('errors');
+    const meterFill = document.getElementById('meterFill');
+    const strengthLabel = document.getElementById('strengthLabel');
+    const toast = document.getElementById('toast');
+    const togglePw = document.getElementById('togglePw');
+    const passwordEl = document.getElementById('password');
+    const confirmEl = document.getElementById('confirm');
+
+    togglePw.addEventListener('click', () => {
+      const type = passwordEl.type === 'password' ? 'text' : 'password';
+      passwordEl.type = type;
+      confirmEl.type = type;
+      togglePw.textContent = type === 'password' ? 'Show' : 'Hide';
+    });
+
+    function scorePassword(pw) {
+      let score = 0;
+      if (!pw) return 0;
+      if (pw.length >= 8) score++;
+      if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) score++;
+      if (/[0-9]/.test(pw)) score++;
+      if (/[^A-Za-z0-9]/.test(pw)) score++;
+      return score; // 0..4
+    }
+
+    function updateMeter() {
+      const pw = passwordEl.value;
+      const score = scorePassword(pw);
+      const pct = [0, 25, 50, 75, 100][score];
+      meterFill.style.width = pct + '%';
+      const labels = ['Too short', 'Weak', 'Fair', 'Good', 'Strong'];
+      strengthLabel.textContent = labels[score];
+      meterFill.style.background = score <= 1 ? 'var(--danger)' : score === 2 ? '#f59e0b' : score === 3 ? '#10b981' : 'var(--accent)';
+    }
+    passwordEl.addEventListener('input', updateMeter);
+
+    function showError(msg) {
+      errorsEl.textContent = msg;
+      if (!msg) return;
+      errorsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function saveToLocal(user) {
+      const key = 'demo_users';
+      const list = JSON.parse(localStorage.getItem(key) || '[]');
+      if (list.some(u => u.username.toLowerCase() === user.username.toLowerCase())) {
+        throw new Error('Username is already taken.');
+      }
+      if (list.some(u => u.email.toLowerCase() === user.email.toLowerCase())) {
+        throw new Error('An account with this email already exists.');
+      }
+      list.push(user);
+      localStorage.setItem(key, JSON.stringify(list));
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      showError('');
+
+      if (!form.checkValidity()) {
+        // trigger native messages for the first invalid element
+        const firstInvalid = form.querySelector(':invalid');
+        firstInvalid.focus();
+        showError('Please fill out all required fields correctly.');
+        return;
+      }
+
+      const firstName = form.firstName.value.trim();
+      const lastName  = form.lastName.value.trim();
+      const email     = form.email.value.trim();
+      const username  = form.username.value.trim();
+      const password  = form.password.value;
+      const confirm   = form.confirm.value;
+      const terms     = form.terms.checked;
+
+      if (password !== confirm) {
+        showError('Passwords do not match.');
+        return;
+      }
+      if (scorePassword(password) < 3) {
+        showError('Password is too weak. Aim for Good or Strong.');
+        return;
+      }
+      if (!terms) {
+        showError('Please agree to the Terms and Privacy Policy.');
+        return;
+      }
+
+      const user = {
+        id: crypto.getRandomValues(new Uint32Array(1))[0].toString(16),
+        firstName, lastName, email, username,
+        passwordHash: btoa(password) // demo only! replace with server-side hashing
+      };
+
+      try {
+        // Demo (client-side only)
+        saveToLocal(user);
+
+        // If you have a backend, replace the saveToLocal call with a fetch:
+        // await fetch('/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(user) });
+
+        toast.style.display = 'block';
+        form.reset();
+        updateMeter();
+        setTimeout(() => {
+          toast.style.display = 'none';
+          // Redirect to login or dashboard as needed
+          // window.location.href = '/login.html';
+        }, 1200);
+      } catch (err) {
+        showError(err.message || 'Something went wrong. Try again.');
+      }
+    });
+
+    // init meter on load
+    updateMeter();
+  </script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LikhangBulaklak — Handmade Flower Shop</title>
+  <style>
+    :root{
+      --bg:#fff7fb; /* soft pink tint */
+      --primary:#ff007be8; /* rose */
+      --accent:#e66a89; /* pastel rose */
+      --ink:#3b2a2f; /* deep plum-brown */
+      --card:#ffffff;
+      --muted:#7c6a70;
+      --shadow:0 10px 25px rgba(233, 30, 99, .08), 0 2px 6px rgba(0,0,0,.06);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;color:var(--ink);background:linear-gradient(160deg,#fff 0%, var(--bg) 100%);}    
+    a{color:inherit;text-decoration:none}
+
+    /* Header / Nav */
+    .nav{
+      position:sticky;top:0;z-index:10;background:rgba(255,255,255,.8);backdrop-filter:saturate(180%) blur(10px);
+      border-bottom:1px solid #f6dce6;
+    }
+    .nav__inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+    .brand__logo{width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 30% 30%, var(--accent), var(--primary));box-shadow:var(--shadow);}
+    .links{display:flex;gap:16px}
+    .links a{padding:8px 12px;border-radius:999px}
+    .links a:hover{background:#ffe6ef}
+
+    .cartBtn{position:relative;display:inline-flex;align-items:center;gap:8px;border:0;background:var(--primary);color:#fff;padding:10px 14px;border-radius:999px;cursor:pointer;box-shadow:var(--shadow)}
+    .cartBtn:hover{filter:brightness(0.98)}
+    .badge{position:absolute;top:-6px;right:-6px;background:#fff;color:var(--primary);border:2px solid var(--primary);min-width:22px;height:22px;border-radius:999px;font-size:12px;display:grid;place-items:center;font-weight:700}
+
+    /* Hero */
+    .hero{max-width:1100px;margin:28px auto 8px;display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:0 18px}
+    .heroCard{background:linear-gradient(135deg,#fff, #ffe3ee);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px;}
+    .hero h1{margin:0 0 8px;font-size:clamp(28px,4vw,46px)}
+    .hero p{margin:0;color:var(--muted)}
+    .heroImg{background-image:url(''); background-size:cover;background-position:center;border-radius:var(--radius);box-shadow:var(--shadow);min-height:240px}
+
+    /* Sections */
+    .section{max-width:1100px;margin:28px auto;padding:0 18px}
+    .section h2{margin:0 0 14px}
+
+    /* Product grid */
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .col-4{grid-column:span 4}
+    @media (max-width:900px){.hero{grid-template-columns:1fr}.col-4{grid-column:span 6}}
+    @media (max-width:640px){.col-4{grid-column:span 12}}
+
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+    .card__img{width:100%;aspect-ratio:4/3;object-fit:cover}
+    .card__body{padding:16px;display:flex;flex-direction:column;gap:10px}
+    .title{font-weight:700}
+    .muted{color:var(--muted)}
+    .price{font-weight:800}
+
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .qty{display:inline-flex;align-items:center;border:1px solid #f3c3d4;border-radius:999px;overflow:hidden}
+    .qty button{border:0;background:transparent;padding:6px 10px;cursor:pointer}
+    .qty input{width:40px;text-align:center;border:0;padding:6px 0;background:transparent}
+
+    .addonBox{background:#fff6fa;border:1px dashed #f3c3d4;border-radius:12px;padding:10px;}
+    .addonList{columns:2;gap:8px}
+    .addonList label{display:block;padding:4px 2px}
+
+    .btn{border:0;background:var(--primary);color:#fff;padding:10px 14px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow);font-weight:700}
+    .btn.alt{background:#fff;border:1px solid #f3c3d4;color:var(--ink)}
+    .btn.block{width:100%}
+
+    /* Cart drawer */
+    .drawer{position:fixed;inset:auto 0 0 auto;width:min(420px,92vw);height:100dvh;background:#fff;box-shadow:-20px 0 40px rgba(0,0,0,.15);transform:translateX(105%);transition:.28s ease;display:flex;flex-direction:column;z-index:50}
+    .drawer.open{transform:translateX(0%)}
+    .drawer__head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #f6dce6}
+    .drawer__body{padding:14px 16px;overflow:auto;display:flex;flex-direction:column;gap:12px}
+    .cartItem{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;border:1px solid #ffe0eb;border-radius:12px;padding:10px}
+    .cartItem img{width:64px;height:64px;object-fit:cover;border-radius:10px}
+    .cartItem h4{margin:0}
+    .x{background:transparent;border:0;font-size:18px;cursor:pointer;color:#b04;}
+    .cartSummary{margin-top:auto;border-top:1px dashed #f3c3d4;padding-top:12px;display:flex;flex-direction:column;gap:6px}
+    .totalRow{display:flex;justify-content:space-between}
+    .footerBtns{display:flex;gap:10px;margin-top:8px}
+
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#ffe6ef;font-size:12px;border:1px solid #f8cdda}
+    .fine{font-size:12px;color:var(--muted)}
+
+    footer{max-width:1100px;margin:40px auto 80px;padding:0 18px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="brand" href="#home" aria-label="LikhangBulaklak Home">
+        <span class="brand__logo" aria-hidden="true"></span>
+        <span>LikhangBulaklak</span>
+      </a>
+      <nav class="links">
+        <a href="#home">Home</a>
+        <a href="#shop">Products</a>
+        <a href="#about">About</a>
+      </nav>
+      <button class="cartBtn" id="openCart" aria-label="Open cart">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <span>Cart</span>
+        <span class="badge" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div class="heroCard">
+        <h1>Handmade bouquets, wrapped with love.</h1>
+        <p>Locally crafted floral arrangements for every occasion. Choose your bouquet, add thoughtful add‑ons, and we’ll do the rest. 💐</p>
+        <div style="margin-top:16px" class="row">
+          <a class="btn" href="#shop">Shop Bouquets</a>
+          <a class="btn alt" href="#about">Learn more</a>
+        </div>
+      </div>
+      <div class="heroImg" role="img" aria-label="A handmade bouquet with pink flowers"></div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section id="shop" class="section">
+      <h2>Popular Products</h2>
+      <div class="grid" id="productGrid"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section">
+      <h2>About LikhangBulaklak</h2>
+      <p class="muted">We are a small, handmade flower studio in the Philippines. Every bouquet is arranged to order with fresh market blooms. Add ribbons, cards, vases, or chocolates — perfect for birthdays, anniversaries, and just-because moments.</p>
+    </section>
+  </main>
+
+  <!-- CART DRAWER -->
+  <aside class="drawer" id="cartDrawer" aria-labelledby="cartTitle" aria-hidden="true" role="dialog">
+    <div class="drawer__head">
+      <h3 id="cartTitle" style="margin:0">Your Cart</h3>
+      <button class="x" id="closeCart" aria-label="Close cart">✕</button>
+    </div>
+    <div class="drawer__body">
+      <div id="cartItems"></div>
+      <div class="cartSummary" id="cartSummary"></div>
+      <div class="footerBtns">
+        <button class="btn alt" id="clearCart">Clear</button>
+        <button class="btn" id="checkout">Checkout</button>
+      </div>
+      <p class="fine">Prices in Philippine Peso (₱). Delivery fees calculated at checkout.</p>
+    </div>
+  </aside>
+
+  <footer>
+    <p>© <span id="year"></span> LikhangBulaklak. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // ---------- DATA ----------
+    const addOns = [
+      { id:'wrap', name:'Premium Wrap', price:50 },
+      { id:'card', name:'Handwritten Card', price:30 },
+      { id:'ribbon', name:'Deluxe Ribbon', price:70 },
+      { id:'vase', name:'Glass Vase', price:150 },
+      { id:'choco', name:'Chocolates', price:200 }
+    ];
+
+    const products = [
+      { id:'bqt-rose', name:'Rose boquet', price:359, img:'https://i.etsystatic.com/50539597/r/il/382271/5782243280/il_1140xN.5782243280_6k7o.jpg', desc:'A blush mix of garden roses and baby’s breath.' },
+      { id:'bqt-sun', name:'Sunflower boquet', price:359, img:'https://missflower.com.my/wp-content/uploads/2021/01/143787838_440485440403400_2817542357285204161_n-1024x1024.jpg', desc:'Cheery sunny sunflower made with love.' },
+      { id:'bqt-lily', name:'Luna Lily Bouquet', price:689, img:'https://craftwayfloral.com.sg/wp-content/uploads/2020/02/poshBlush.jpg', desc:'White lilies with pastel fillers for elegance.' },
+      { id:'bqt-mix', name:'Mix flower boquet', price:999,img:'https://www.sweetlifeandco.my/wp-content/uploads/2023/01/STEPH-Mix-Bouquet-SweetLife-Co-Penang-Florist-Malaysia-3.jpg', desc:'A seasonal assortment, hand‑picked daily.' },
+      { id:'bqt-tulip', name:'Tulip boquet', price:1199, img:'https://tse2.mm.bing.net/th/id/OIP.alqDO6dQRrOaza6XT26KpgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3', desc:'12 fresh tulips to lips us.' },
+      { id:'bqt-daisy', name:'lavander boquet', price:599, img:'https://hookok.com/wp-content/uploads/2023/06/911flowerbouquets-53-1024x1536.jpg', desc:'lavander for you because i love you.' }
+    ];
+
+    // ---------- STATE ----------
+    const currency = n => `₱${n.toLocaleString('en-PH')}`;
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+
+    const Cart = {
+      key: 'flowerCart',
+      items: [],
+      load(){
+        try{ this.items = JSON.parse(localStorage.getItem(this.key)) || [] }catch{ this.items = [] }
+      },
+      persist(){ localStorage.setItem(this.key, JSON.stringify(this.items)) },
+      count(){ return this.items.reduce((a,b)=>a + Number(b.qty||0), 0) },
+      add(item){
+        const sig = JSON.stringify({id:item.id, addOns:item.addOns.map(a=>a.id)});
+        const existing = this.items.find(i => JSON.stringify({id:i.id, addOns:i.addOns.map(a=>a.id)}) === sig);
+        if(existing){ existing.qty += item.qty }
+        else{ this.items.push(item) }
+        this.persist();
+      },
+      remove(idx){ this.items.splice(idx,1); this.persist(); },
+      clear(){ this.items = []; this.persist(); },
+      totals(){
+        let sub=0, addon=0;
+        this.items.forEach(i=>{
+          sub += i.price * i.qty;
+          addon += i.addOns.reduce((a,b)=>a + b.price, 0) * i.qty;
+        });
+        return { sub, addon, grand: sub + addon };
+      }
+    };
+
+    // ---------- RENDER PRODUCTS ----------
+    function renderProducts(){
+      const grid = $('#productGrid');
+      grid.innerHTML = '';
+      products.forEach(p=>{
+        const card = document.createElement('div');
+        card.className = 'card col-4';
+        card.innerHTML = `
+          <img class="card__img" src="${p.img}" alt="${p.name}">
+          <div class="card__body">
+            <div class="title">${p.name}</div>
+            <div class="muted">${p.desc}</div>
+            <div class="price">${currency(p.price)}</div>
+
+            <div class="addonBox">
+              <div class="muted" style="margin-bottom:6px; font-weight:600">Add‑ons</div>
+              <div class="addonList">
+                ${addOns.map(a=>`
+                  <label>
+                    <input type="checkbox" value="${a.id}" data-price="${a.price}"> ${a.name} <span class="pill">+ ${currency(a.price)}</span>
+                  </label>`).join('')}
+              </div>
+            </div>
+
+            <div class="row" style="justify-content:space-between">
+              <div class="qty" aria-label="Quantity selector">
+                <button class="dec" aria-label="Decrease quantity">−</button>
+                <input type="number" min="1" value="1">
+                <button class="inc" aria-label="Increase quantity">＋</button>
+              </div>
+              <button class="btn addBtn">Add to Cart</button>
+            </div>
+          </div>
+        `;
+        // quantity handlers
+        const input = card.querySelector('input[type="number"]');
+        card.querySelector('.dec').addEventListener('click',()=>{ input.value = Math.max(1, (parseInt(input.value)||1) - 1)});
+        card.querySelector('.inc').addEventListener('click',()=>{ input.value = (parseInt(input.value)||1) + 1 });
+
+        // add to cart handler
+        card.querySelector('.addBtn').addEventListener('click',()=>{
+          const qty = Math.max(1, parseInt(input.value)||1);
+          const chosen = [...card.querySelectorAll('input[type="checkbox"]:checked')]
+            .map(ch=> addOns.find(a=>a.id===ch.value));
+          Cart.add({ id:p.id, name:p.name, price:p.price, img:p.img, qty, addOns: chosen });
+          updateCartUI();
+          openCart();
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    // ---------- CART UI ----------
+    function updateCartUI(){
+      $('#cartCount').textContent = Cart.count();
+
+      const list = $('#cartItems');
+      list.innerHTML = '';
+      if(!Cart.items.length){
+        list.innerHTML = '<p class="muted">Your cart is empty. Add a bouquet to begin. 🌸</p>';
+      } else {
+        Cart.items.forEach((i,idx)=>{
+          const div = document.createElement('div');
+          div.className = 'cartItem';
+          div.innerHTML = `
+            <img src="${i.img}" alt="${i.name}">
+            <div>
+              <h4>${i.name} <span class="pill">×${i.qty}</span></h4>
+              ${i.addOns.length ? `<div class="fine">Add‑ons: ${i.addOns.map(a=>a.name).join(', ')}</div>` : '<div class="fine">No add‑ons</div>'}
+            </div>
+            <div style="text-align:right">
+              <div class="price">${currency(i.price * i.qty)}</div>
+              ${i.addOns.length ? `<div class="fine">+ ${currency(i.addOns.reduce((a,b)=>a+b.price,0) * i.qty)}</div>` : ''}
+              <button class="x" aria-label="Remove item">Remove</button>
+            </div>
+          `;
+          div.querySelector('.x').addEventListener('click',()=>{ Cart.remove(idx); updateCartUI(); });
+          list.appendChild(div);
+        });
+      }
+
+      const { sub, addon, grand } = Cart.totals();
+      $('#cartSummary').innerHTML = `
+        <div class="totalRow"><span>Items</span><strong>${currency(sub)}</strong></div>
+        <div class="totalRow"><span>Add‑ons</span><strong>${currency(addon)}</strong></div>
+        <div class="totalRow" style="margin-top:6px;font-size:18px"><span>Total</span><strong>${currency(grand)}</strong></div>
+      `;
+    }
+
+    // ---------- CART DRAWER CONTROL ----------
+    const drawer = $('#cartDrawer');
+    function openCart(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); }
+    function closeCart(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); }
+
+    $('#openCart').addEventListener('click', openCart);
+    $('#closeCart').addEventListener('click', closeCart);
+    $('#clearCart').addEventListener('click', ()=>{ Cart.clear(); updateCartUI(); });
+    $('#checkout').addEventListener('click', ()=>{
+      if(!Cart.items.length){ alert('Your cart is empty!'); return; }
+      const { grand } = Cart.totals();
+      alert(`Thank you! Your total is ${currency(grand)}. order placed.`);
+    });
+
+    // ---------- INIT ----------
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.getElementById('year').textContent = new Date().getFullYear();
+      Cart.load();
+      renderProducts();
+      updateCartUI();
+    });
+  </script>
+</body>
+</html>
